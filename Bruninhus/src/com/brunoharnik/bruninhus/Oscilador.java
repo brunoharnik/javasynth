@@ -20,17 +20,15 @@ import javafx.scene.text.FontWeight;
 
 public class Oscilador extends VBox {
 
-	private FormaDaOnda formaDaOnda = FormaDaOnda.senoide;
-
-	private int posOnda;
-
-	private final Random random = new Random();
-
 	public Label lblOscilador = new Label();
 
 	private HBox hBoxComponentes = new HBox();
 
-	private ComboBox<FormaDaOnda> comboBox = new ComboBox<>();
+	private ComboBox<TabelaOndas> comboBox = new ComboBox<>();
+	private TabelaOndas tabelaOndas = TabelaOndas.Senoide;
+
+	private int tamanhoPassoTabelaOndas;
+	private int indexTabelaOndas;
 
 	private VBox vBoxTom = new VBox();
 	private Label lblTituloTom = new Label("Tom:");
@@ -38,39 +36,19 @@ public class Oscilador extends VBox {
 
 	private double offsetTom;
 
-	private double frequenciaNota, frequencia;
+	private double frequenciaNota;
 
 	public Oscilador() {
 
-		comboBox.getItems().setAll(FormaDaOnda.values());
-		comboBox.getSelectionModel().select(FormaDaOnda.senoide);
+		comboBox.getItems().addAll(TabelaOndas.values());
+		comboBox.getSelectionModel().select(TabelaOndas.Senoide);
 
 		comboBox.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 
-				switch (comboBox.getValue()) {
-
-				case senoide:
-					formaDaOnda = FormaDaOnda.senoide;
-					break;
-				case quadrada:
-					formaDaOnda = FormaDaOnda.quadrada;
-					break;
-				case serra:
-					formaDaOnda = FormaDaOnda.serra;
-					break;
-				case triangular:
-					formaDaOnda = FormaDaOnda.triangular;
-					break;
-				case ruido:
-					formaDaOnda = FormaDaOnda.ruido;
-					break;
-				default:
-					formaDaOnda = FormaDaOnda.senoide;
-					break;
-				}
+				tabelaOndas = comboBox.getValue();
 			}
 		});
 
@@ -90,16 +68,8 @@ public class Oscilador extends VBox {
 		this.getChildren().addAll(lblOscilador, hBoxComponentes);
 	}
 
-	private enum FormaDaOnda {
-		senoide, quadrada, serra, triangular, ruido
-	}
-
-	public double getFrequenciaNota() {
-		return frequencia;
-	}
-
 	public void setFrequencia(double frequencia) {
-		frequenciaNota = this.frequencia = frequencia;
+		frequenciaNota = frequencia;
 		aplicaOffsetTom();
 	}
 
@@ -108,26 +78,9 @@ public class Oscilador extends VBox {
 	}
 
 	public double proximoSample() {
-
-		double tDivP = (posOnda++ / (double) Sintetizador.AudioInfo.SAMPLE_RATE) / (1d / frequencia);
-
-		switch (formaDaOnda) {
-		case senoide:
-			return Math.sin(Utils.Math.frequenciaParaFrequenciaAngular(frequencia) * (posOnda - 1)
-					/ Sintetizador.AudioInfo.SAMPLE_RATE);
-		case quadrada:
-			return Math.signum(Math.sin(Utils.Math.frequenciaParaFrequenciaAngular(frequencia) * (posOnda - 1)
-					/ Sintetizador.AudioInfo.SAMPLE_RATE));
-		case serra:
-			return 2d * (tDivP - Math.floor(0.5 + tDivP));
-		case triangular:
-			return 2d * Math.abs(2d * (tDivP - Math.floor(0.5 + tDivP))) - 1;
-		case ruido:
-			return random.nextDouble();
-		default:
-			new RuntimeException("Erro na seleção do oscilador");
-			return 0;
-		}
+		double sample = tabelaOndas.getSamples()[indexTabelaOndas];
+		indexTabelaOndas = (indexTabelaOndas + tamanhoPassoTabelaOndas) % tabelaOndas.TAMANHO;
+		return sample;
 	}
 
 	private void editaLabelTom(Label lblTom) {
@@ -175,8 +128,9 @@ public class Oscilador extends VBox {
 			label.setTextFill(Color.WHITE);
 		}
 	}
-	
+
 	private void aplicaOffsetTom() {
-		frequencia = frequenciaNota * Math.pow(2, getOffsetTom());
+		tamanhoPassoTabelaOndas = (int) (TabelaOndas.TAMANHO * (frequenciaNota * Math.pow(2, getOffsetTom()))
+				/ Sintetizador.AudioInfo.SAMPLE_RATE);
 	}
 }

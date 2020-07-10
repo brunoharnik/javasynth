@@ -10,7 +10,7 @@ public class Sintetizador extends BorderPane {
 	public boolean deveGerar;
 	public int posOnda;
 
-	public final Oscilador[] osciladores = new Oscilador[6];
+	public final Oscilador[] osciladores = new Oscilador[3];
 
 	public VBox vBoxOsciladores = new VBox();
 
