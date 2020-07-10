@@ -4,6 +4,11 @@ import static org.lwjgl.openal.AL10.*;
 
 public class OpenALException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public OpenALException(int codigoErro) {
 		super("Erro interno "
 				+ (codigoErro == AL_INVALID_NAME ? "invalid name"
