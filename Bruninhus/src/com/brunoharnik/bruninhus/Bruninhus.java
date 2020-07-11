@@ -2,13 +2,20 @@ package com.brunoharnik.bruninhus;
 
 import java.util.HashMap;
 
+import com.brunoharnik.bruninhus.controller.SintetizadorController;
+import com.brunoharnik.bruninhus.model.Oscilador;
 import com.brunoharnik.bruninhus.utils.Utils;
+import com.brunoharnik.bruninhus.view.Sintetizador;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Bruninhus extends Application {
+	
+	public SintetizadorController sintetizadorController;
+	public Scene cena;
+	public Sintetizador sintetizador ;
 
 	private static final HashMap<Character, Double> FREQUENCIAS_NOTAS = new HashMap<>();
 
@@ -29,10 +36,12 @@ public class Bruninhus extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		Sintetizador sintetizador = new Sintetizador(stage);
-		Scene cena = new Scene(sintetizador, 800, 600);
+		sintetizador = new Sintetizador(stage);
+		cena = new Scene(sintetizador, 800, 600);
 
-		acoesTeclas(cena, sintetizador);
+		sintetizadorController = new SintetizadorController(sintetizador);
+		
+		acoesTeclas(cena);
 
 		stage.setScene(cena);
 		stage.setResizable(false);
@@ -45,7 +54,7 @@ public class Bruninhus extends Application {
 
 	}
 
-	public void acoesTeclas(Scene cena, Sintetizador sintetizador) {
+	public void acoesTeclas(Scene cena) {
 		
 		cena.setOnKeyPressed(evt -> {
 			if(!FREQUENCIAS_NOTAS.containsKey(evt.getCode().toString().charAt(0))) return;

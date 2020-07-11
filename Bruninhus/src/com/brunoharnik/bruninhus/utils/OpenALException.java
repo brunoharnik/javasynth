@@ -1,4 +1,4 @@
-package com.brunoharnik.bruninhus;
+package com.brunoharnik.bruninhus.utils;
 
 import static org.lwjgl.openal.AL10.*;
 

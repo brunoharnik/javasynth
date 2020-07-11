@@ -1,6 +1,8 @@
-package com.brunoharnik.bruninhus;
+package com.brunoharnik.bruninhus.model;
 
 import com.brunoharnik.bruninhus.utils.Utils;
+import com.brunoharnik.bruninhus.view.Sintetizador;
+import com.brunoharnik.bruninhus.view.Sintetizador.AudioInfo;
 
 enum TabelaOndas {
 	

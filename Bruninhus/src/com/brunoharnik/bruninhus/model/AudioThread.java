@@ -1,18 +1,21 @@
-package com.brunoharnik.bruninhus;
+package com.brunoharnik.bruninhus.model;
 
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 
+import com.brunoharnik.bruninhus.utils.OpenALException;
 import com.brunoharnik.bruninhus.utils.Utils;
+import com.brunoharnik.bruninhus.view.Sintetizador;
+import com.brunoharnik.bruninhus.view.Sintetizador.AudioInfo;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
 
 import java.util.function.Supplier;
 
-class AudioThread extends Thread {
+public class AudioThread extends Thread {
 
-	static final int TAMANHO_BUFFER = 512;
+	public static final int TAMANHO_BUFFER = 512;
 	static final int QTD_BUFFER = 8;
 	
 	private final Supplier<short[]> bufferSupplier;
@@ -40,7 +43,7 @@ class AudioThread extends Thread {
 		start();
 	}
 	
-	boolean isRodando() {
+	public boolean isRodando() {
 		return rodando;
 	}
 
@@ -75,12 +78,12 @@ class AudioThread extends Thread {
 		alcCloseDevice(dispositivo);
 	}
 	
-	synchronized void triggerPlayback() {
+	public synchronized void triggerPlayback() {
 		rodando = true;
 		notify();
 	}
 	
-	void close() {
+	public void close() {
 		fechado = true;
 		triggerPlayback();
 	}

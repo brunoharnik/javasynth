@@ -1,8 +1,10 @@
-package com.brunoharnik.bruninhus;
+package com.brunoharnik.bruninhus.model;
 
 import java.util.Random;
 
 import com.brunoharnik.bruninhus.utils.Utils;
+import com.brunoharnik.bruninhus.view.Sintetizador;
+import com.brunoharnik.bruninhus.view.Sintetizador.AudioInfo;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

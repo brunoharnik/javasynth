@@ -1,4 +1,7 @@
-package com.brunoharnik.bruninhus;
+package com.brunoharnik.bruninhus.view;
+
+import com.brunoharnik.bruninhus.model.AudioThread;
+import com.brunoharnik.bruninhus.model.Oscilador;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
@@ -29,7 +32,7 @@ public class Sintetizador extends BorderPane {
 		return s;
 	});
 
-	public static class AudioInfo {
+	public class AudioInfo {
 		public static final int SAMPLE_RATE = 44100;
 	}
 
